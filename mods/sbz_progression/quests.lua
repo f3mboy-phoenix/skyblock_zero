@@ -100,3 +100,17 @@ sbz_api.register_quest({
     .. "",
 })
 core.log('action', 'Loading quests from markdown took: ' .. ((core.get_us_time() - t0) / 1000) .. 'ms')
+
+
+core.register_on_mods_loaded(function()
+local names ={}
+for i,v in pairs(quests) do
+ names[v.title] = true
+end
+for i,v in pairs(quests) do
+ if v.requires then
+  for x,y in pairs(v.reqiures) do
+   assert(names[y], "Broken Quest Requirement:\nQuest: "..tostring(v.title) .. "\nRequires: ".. tostring(y))
+ end
+end
+end)
